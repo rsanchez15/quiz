@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <meta charset="utf-8">
+    <title>Quiz</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>Bienvenido a <%= title %></h1>
-    <p>El portal donde podrá crear sus propios juegos</p>
-    <p><a href="/question">Comience a jugar</a></p>
+    <h2>Quiz: El juego de las preguntas</h2>
+    <p>La respuesta es <%= result %></p>
+    <p><a href="/question">Inténtelo otra vez</a></p><br>
   	<footer>
-      <p><a href="/author">Autor del <%= title %></a></p>
   		<a href="https://github.com/rsanchez15/quiz.git" target="_blank">Página de GitHub</a>
   	</footer>
   </body>
