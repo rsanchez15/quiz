@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Quiz</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h2>Quiz: El juego de las preguntas</h2>
-    <p>La respuesta es <%= result %></p>
-    <p><a href="/question">Inténtelo otra vez</a></p><br>
-  	<footer>
-  		<a href="https://github.com/rsanchez15/quiz.git" target="_blank">Página de GitHub</a>
-  	</footer>
-  </body>
-</html>
+<p>La respuesta <strong><%= answer %></strong> es <%= result %></p>
+<p><a href="/question?answer=<%= answer %>">Inténtelo otra vez</a></p><br>
+  	
