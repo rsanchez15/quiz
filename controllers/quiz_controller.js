@@ -1,5 +1,6 @@
 var models = require('../models');
 
+
 //GET /quizes
 exports.index = function(req, res, next){
 	models
