@@ -1,0 +1,9 @@
+<table>
+	<% for (var i in quizes) { %>
+		<tr>
+			<td>
+				<a href="quizes/<%= quizes[i].id %>"><%= quizes[i].question %></a>
+			</td>
+		</tr>
+	<% } %>
+</table>
