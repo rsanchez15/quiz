@@ -3,12 +3,21 @@ var models = require('../models');
 
 //GET /quizes
 exports.index = function(req, res, next){
-	models
-	.Quiz 
-	.findAll() //Busca la primera pregunta
-	.then (function(quizes) {
-		res.render('quizes/index.ejs', {quizes: quizes})
-	}).catch(function(error) { next(error); });
+	if(!req.query.search){
+		models
+		.Quiz 
+		.findAll() //Busca la primera pregunta
+		.then (function(quizes) {
+			res.render('quizes/index.ejs', {quizes: quizes})
+		}).catch(function(error) { next(error); });
+	}else {
+		models.Quiz.findAll({
+			where: ["question like ?", "%" + req.query.search.split(" ").join("%") + "%"]
+		}).then(function(quizes){
+			var busqueda = req.query.search;
+        	res.render( 'quizes/index', { quizes: quizes.sort(), busqueda: busqueda});
+		}).catch(function(error) { next(error); });
+	}
 };
 
 //GET /quizes/:id
