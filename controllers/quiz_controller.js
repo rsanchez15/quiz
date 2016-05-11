@@ -1,4 +1,5 @@
 var models = require('../models');
+var Sequelize = require('sequelize');
 
 //Autoload el quiz asociado a :quizId
 exports.load = function(req,res,next, quizId){
@@ -29,6 +30,13 @@ exports.create = function(req, res, next){
 	.then(function(quiz){
 		req.flash('success', 'Quiz creado con éxito.');
 		res.redirect('/quizes'); //res.redirect: Redirección HTTP a la lista de preguntas
+	}).catch(Sequelize.ValidationError, function(error){
+		req.flash('error', 'Errores en el formulario:');
+		for (var i in error.errors) {
+			req.flash('error', error.errors[i].value);
+		};
+
+		res.render('quizes/new', {quiz: quiz});
 	}).catch(function(error){
 		req.flash('error', 'Error al crear un Quiz: ' + error.message);
 		next(error);
@@ -38,27 +46,58 @@ exports.create = function(req, res, next){
 
 //GET /quizes
 exports.index = function(req, res, next){
-	if(!req.query.search){
-		models.Quiz.findAll() //Busca la primera pregunta
-		.then (function(quizes) {
-			res.render('quizes/index.ejs', {quizes: quizes})
-		}).catch(function(error) { next(error); });
+	var format = req.params.format || ".html";
+
+	if (format === '.html'){
+		if(!req.query.search){
+			models.Quiz.findAll() //Busca la primera pregunta
+			.then (function(quizes) {
+				res.render('quizes/index.ejs', {quizes: quizes})
+			}).catch(function(error) { next(error); });
+		}else {
+			models.Quiz.findAll({
+				where: ["question like ?", "%" + req.query.search.split(" ").join("%") + "%"]
+			}).then(function(quizes){
+				var busqueda = req.query.search;
+	        	res.render( 'quizes/index', { quizes: quizes.sort(), busqueda: busqueda});
+			}).catch(function(error) { next(error); });
+		}
+
+	}else if (format === '.json'){
+		models.Quiz.findAll()
+		.then(function(quizes){
+			res.send(JSON.stringify(quizes));
+		}).catch(function(error){
+			req.flash('error', 'Error al solicitar el JSON del Quiz');
+			next(error);
+		});
 	}else {
-		models.Quiz.findAll({
-			where: ["question like ?", "%" + req.query.search.split(" ").join("%") + "%"]
-		}).then(function(quizes){
-			var busqueda = req.query.search;
-        	res.render( 'quizes/index', { quizes: quizes.sort(), busqueda: busqueda});
-		}).catch(function(error) { next(error); });
+		next( new Error('Error de formato'));
 	}
 };
 
 //GET /quizes/:id
 exports.show = function(req, res,next){
+	var format = req.params.format || ".html";
 	var answer = req.query.answer || '';
-	res.render('quizes/show', {	quiz: req.quiz,
-								answer : answer});
+	if (format === '.html'){
+		res.render('quizes/show', {	quiz: req.quiz,
+									answer : answer});
+
+	}else if (format === '.json'){
+		models.Quiz.findAll(
+		).then(function(quizes){
+			res.send(JSON.stringify(req.quiz));
+		}).catch(function(error){
+			req.flash('error', 'Error al solicitar el JSON del Quiz');
+			next(error);
+		});
+
+	}else {
+		next( new Error('Error de formato'));
+	}
 };
+
 
 //GET /quizes/:id/check
 exports.check = function(req,res,next){

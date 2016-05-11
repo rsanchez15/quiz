@@ -38,3 +38,15 @@ footer {
 nav a {
 	margin: 0px 10px 0px 0px;
 }
+#flasherror {
+	color: red;
+	margin-bottom: 1px;
+}
+#flashsuccess {
+	color: green;
+	margin-bottom: 1px;
+}
+#flashinfo {
+	color: yellow;
+	margin-bottom: 1px;
+}
