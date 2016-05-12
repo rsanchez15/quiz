@@ -44,12 +44,13 @@ exports.create = function(req, res, next){
 
 };
 
-//GET quizes/:id/edit
+//GET /quizes/:id/edit
 exports.edit = function (req, res, next) {
 	var quiz = req.quiz; //req.quiz de autoload de instacia de quiz
 	res.render('quizes/edit', {quiz: quiz});
 };
 
+//PUT /quizes/:id
 exports.update = function(req, res, next){
 	req.quiz.question = req.body.quiz.question; //utilizamos autoload
 	req.quiz.answer = req.body.quiz.answer;
@@ -66,6 +67,18 @@ exports.update = function(req, res, next){
 		res.render('quizes/edit', {quiz: req.quiz});
 	}).catch(function(error){
 		req.flash('error','Erroror al editar el Quiz: ' + error.message);
+		next(error);
+	});
+};
+
+//DELETE /quizes/:id
+exports.destroy = function(req,res,next){
+	req.quiz.destroy()
+	.then(function() {
+		req.flash('success', 'Quiz borrado con éxito.');
+		res.redirect('/quizes');
+	}).catch(function(error){
+		req.flash('error', 'Error al editar el Quiz: ' + error.message);
 		next(error);
 	});
 };
