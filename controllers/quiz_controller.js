@@ -44,6 +44,32 @@ exports.create = function(req, res, next){
 
 };
 
+//GET quizes/:id/edit
+exports.edit = function (req, res, next) {
+	var quiz = req.quiz; //req.quiz de autoload de instacia de quiz
+	res.render('quizes/edit', {quiz: quiz});
+};
+
+exports.update = function(req, res, next){
+	req.quiz.question = req.body.quiz.question; //utilizamos autoload
+	req.quiz.answer = req.body.quiz.answer;
+
+	req.quiz.save({fields: ["question", "answer"]})
+	.then (function(quiz){
+		req.flash("success", "Quiz editado con éxito.");
+		res.redirect('/quizes'); //Redirección HTTP a lista de preguntas
+	}).catch(Sequelize.ValidationError, function(error){
+		req.flash('error','Errores en el formulario:');
+		for (var i in error.errors[i].value){
+			reque.flash('error', error.errors[i].value);
+		};
+		res.render('quizes/edit', {quiz: req.quiz});
+	}).catch(function(error){
+		req.flash('error','Erroror al editar el Quiz: ' + error.message);
+		next(error);
+	});
+};
+
 //GET /quizes
 exports.index = function(req, res, next){
 	var format = req.params.format || ".html";

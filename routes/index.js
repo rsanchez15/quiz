@@ -21,5 +21,7 @@ router.get('/quizes/:quizId(\\d+):format?', 		quizController.show);
 router.get('/quizes/:quizId(\\d+)/check', 			quizController.check);
 router.get('/quizes/new',							quizController.new);
 router.post('/quizes',								quizController.create);
+router.get('/quizes/:quizId(\\d+)/edit', 			quizController.edit);
+router.put('/quizes/:quizId(\\d+)', 				quizController.update);
 
 module.exports = router;
