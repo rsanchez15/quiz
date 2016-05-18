@@ -26,11 +26,13 @@ var sequelize = new Sequelize(url,
 var Quiz = sequelize.import(path.join(__dirname,'quiz'));
 //Importar la definición de la tabla Comments de comment.js
 var Comment = sequelize.import(path.join(__dirname,'comment'));
+//Importar la definición de la tabla Users de user.js
+var User = sequelize.import(path.join(__dirname,'user'));
 
 /*//sequelize.sync() crea en inicializa la tabla de preguntas en DB
 sequelize.sync().then(function() { 		//sync() crea la tabla quiz
 	Quiz.count().then(function (c) {
-		if (c===0) {	//la tabla se inicializa si está vacía	
+		if (c===0) {	//la tabla se inicializa si está vacía
 			Quiz.bulkCreate ([	{ question: 'Capital de Italia', answer: 'Roma'},
 								{ question: 'Capital de Portugal', answer: 'Lisboa'}
 							])
@@ -44,10 +46,13 @@ sequelize.sync().then(function() { 		//sync() crea la tabla quiz
 	process.exit(1);
 });*/
 
-//Relaciones entre módelos
+// Relacion 1 a N entre Quiz y Comments
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
-
+// Relacion 1 a N entre User y Quiz
+User.hasMany(Quiz, {foreignKey: "AuthorId"});
+Quiz.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 
 exports.Quiz = Quiz; //exportar la definición de la tabla Quiz
 exports.Comment = Comment; //exportar la definición de la tabla Comment
+exports.User = User; //exportar la definición de la tabla User
