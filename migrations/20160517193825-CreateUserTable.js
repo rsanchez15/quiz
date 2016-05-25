@@ -16,6 +16,7 @@ module.exports = {
         salt: { type: Sequelize.STRING },
         isAdmin: { type: Sequelize.BOOLEAN,
                     defaultValue: false },
+        timeLogin: { type: Sequelize.INTEGER },
         createdAt: { type: Sequelize.DATE,
                       allowNull: false },
         updatedAt: {  type: Sequelize.DATE,

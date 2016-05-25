@@ -22,11 +22,13 @@ exports.new = function (req, res, next) {
 
 //POST /quizes/create
 exports.create = function(req, res, next){
+	var authorId = req.session.user && req.session.user.id || 0;
 	var quiz = models.Quiz.build( {	question: req.body.quiz.question,
-									answer: req.body.quiz.answer});
+									answer: req.body.quiz.answer,
+									AuthorId: authorId });
 
 	//gaurda en la BD los campos pregunta y respuesta quiz
-	quiz.save({fields: ["question", "answer"]})
+	quiz.save({fields: ["question", "answer", "AuthorId"]})
 	.then(function(quiz){
 		req.flash('success', 'Quiz creado con éxito.');
 		res.redirect('/quizes'); //res.redirect: Redirección HTTP a la lista de preguntas

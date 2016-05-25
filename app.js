@@ -10,6 +10,7 @@ var flash = require('express-flash');
 var methodOverride = require('method-override');
 
 var routes = require('./routes/index');
+var sesion = require('./controllers/session_controller.js');
 
 var app = express();
 
@@ -40,6 +41,8 @@ app.use(function(req, res, next){
   res.locals.session = req.session;
   next();
 });
+
+app.use(sesion.logout);
 
 app.use('/', routes);
 

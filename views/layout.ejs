@@ -19,6 +19,7 @@
             <a href="/session">Login</a>
           <% } else { %>
             <%= session.user.username %>
+            <%= session.user.timeLogin %>
             <a href="/users/<%= session.user.id %>">Perfil</a>
             <a href="/session?_method=DELETE">Logout</a>
           <% } %>
