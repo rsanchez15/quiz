@@ -25,22 +25,22 @@ router.get('/author',  								quizController.author);
 router.get('/quizes:format?', 						quizController.index);
 router.get('/quizes/:quizId(\\d+):format?', 		quizController.show);
 router.get('/quizes/:quizId(\\d+)/check', 			quizController.check);
-router.get('/quizes/new',							quizController.new);
-router.post('/quizes',								quizController.create);
-router.get('/quizes/:quizId(\\d+)/edit', 			quizController.edit);
-router.put('/quizes/:quizId(\\d+)', 				quizController.update);
-router.delete('/quizes/:quizId(\\d+)',				quizController.destroy);
+router.get('/quizes/new',							sessionController.loginRequired ,quizController.new);
+router.post('/quizes',								sessionController.loginRequired ,quizController.create);
+router.get('/quizes/:quizId(\\d+)/edit', 			sessionController.loginRequired ,quizController.edit);
+router.put('/quizes/:quizId(\\d+)', 				sessionController.loginRequired ,quizController.update);
+router.delete('/quizes/:quizId(\\d+)',				sessionController.loginRequired ,quizController.destroy);
 //Definicion de rutas de comentarios
-router.get('/quizes/:quizId(\\d+)/comments/new',	commentController.new);
-router.post('/quizes/:quizId(\\d+)/comments', 		commentController.create);
+router.get('/quizes/:quizId(\\d+)/comments/new',	sessionController.loginRequired ,commentController.new);
+router.post('/quizes/:quizId(\\d+)/comments', 		sessionController.loginRequired ,commentController.create);
 //Definicion de rutas de cuenta
 router.get('/users', 								userController.index);	//listado de usuarios
 router.get('/users/:userId(\\d+)', 					userController.show);	//ver un usuario
 router.get('/users/new',							userController.new);	//formulario sign in
 router.post('/users',								userController.create);	//registrar usuario
-router.get('/users/:userId(\\d+)/edit', 			userController.edit);	//editar cuenta
-router.put('/users/:userId(\\d+)', 					userController.update);	//actualizar cuenta
-router.delete('/users/:userId(\\d+)',				userController.destroy);//borrar cuenta
+router.get('/users/:userId(\\d+)/edit', 			sessionController.loginRequired ,userController.edit);	//editar cuenta
+router.put('/users/:userId(\\d+)', 					sessionController.loginRequired ,userController.update);	//actualizar cuenta
+router.delete('/users/:userId(\\d+)',				sessionController.loginRequired ,userController.destroy);//borrar cuenta
 //Definicion de rutas de sesion
 router.get('/session',								sessionController.new); 	//formulario de login
 router.post('/session',								sessionController.create);	//crear tu sesion
