@@ -24,10 +24,13 @@ var sequelize = new Sequelize(url,
 
 //Importar la definiión de la tabla Quiz de quiz.js
 var Quiz = sequelize.import(path.join(__dirname,'quiz'));
+
 //Importar la definición de la tabla Comments de comment.js
 var Comment = sequelize.import(path.join(__dirname,'comment'));
+
 //Importar la definición de la tabla Users de user.js
 var User = sequelize.import(path.join(__dirname,'user'));
+
 
 /*//sequelize.sync() crea en inicializa la tabla de preguntas en DB
 sequelize.sync().then(function() { 		//sync() crea la tabla quiz
@@ -49,9 +52,14 @@ sequelize.sync().then(function() { 		//sync() crea la tabla quiz
 // Relacion 1 a N entre Quiz y Comments
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
+
 // Relacion 1 a N entre User y Quiz
 User.hasMany(Quiz, {foreignKey: "AuthorId"});
 Quiz.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
+
+// Relacion 1 a N entre User y Comments
+User.hasMany(Comment, {foreignKey: "AuthorId"});
+Comment.belongsTo(User, {as: "Author", foreignKey: "AuthorId"});
 
 exports.Quiz = Quiz; //exportar la definición de la tabla Quiz
 exports.Comment = Comment; //exportar la definición de la tabla Comment

@@ -3,7 +3,11 @@ var Sequelize = require('sequelize');
 
 //Autoload el quiz asociado a :quizId
 exports.load = function(req,res,next, quizId){
-	models.Quiz.findById(quizId, {include: [ models.Comment ] })
+	models.Quiz.findById(quizId, {	include: [{ model: models.Comment , 
+									include: [{ model: models.User, 
+												as: 'Author',
+												attributes: ['username']} 
+											]} ]} )
 		.then(function(quiz) {
 			if (quiz){
 				req.quiz = quiz;
@@ -14,10 +18,40 @@ exports.load = function(req,res,next, quizId){
 		}).catch(function(error){next(error); });
 };
 
+// MW que permite acciones solamente si al usuario logeado es admin o es el autor del quiz.
+exports.ownershipRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var quizAuthorId = req.quiz.AuthorId;
+    var loggedUserId = req.session.user.id;
+
+    if (isAdmin || quizAuthorId === loggedUserId) {
+        next();
+    } else {
+      console.log('Operación prohibida: El usuario logeado no es el autor del quiz, ni un administrador.');
+      res.send(403);
+    }
+};
+
 //GET /quizes/new
 exports.new = function (req, res, next) {
 	var quiz = models.Quiz.build({question: "", answer: ""});
 	res.render('quizes/new', {quiz: quiz});
+};
+
+// MW que permite acciones solamente si al usuario logeado es admin o es el autor del quiz.
+exports.ownershipRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var quizAuthorId = req.quiz.AuthorId;
+    var loggedUserId = req.session.user.id;
+
+    if (isAdmin || quizAuthorId === loggedUserId) {
+        next();
+    } else {
+      console.log('Operación prohibida: El usuario logeado no es el autor del quiz, ni un administrador.');
+      res.send(403);
+    }
 };
 
 //POST /quizes/create
