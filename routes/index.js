@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var multer = require('multer');
+var upload = multer({ dest: './uploads/'});
+
 var quizController =  require('../controllers/quiz_controller');
 var commentController = require('../controllers/comment_controller');
 var userController = require('../controllers/user_controller');

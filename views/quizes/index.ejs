@@ -9,8 +9,18 @@
 <table>
 	<% for (var i in quizes) { %>
 		<tr>
+
+			<td>
+		        <% if (quizes[i].Attachment) { %>
+		          <img src="<%= quizes[i].Attachment.url %>" width="50px" />
+		        <% } else { %>
+		          <img src= "/images/question.jpg" width="50px" />
+		        <% } %>
+		     </td>
+
 			<td>
 				<a href="quizes/<%= quizes[i].id %>"><%= quizes[i].question %></a>
+				
 			</td>
 			<% if (session.user) { %>
 			<% if (session.user.isAdmin || session.user.id === quizes[i].AuthorId) { %>

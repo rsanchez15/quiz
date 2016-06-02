@@ -31,6 +31,8 @@ var Comment = sequelize.import(path.join(__dirname,'comment'));
 //Importar la definición de la tabla Users de user.js
 var User = sequelize.import(path.join(__dirname,'user'));
 
+//Importar la definición de la tabla Attachments de user.js
+var Attachment = sequelize.import(path.join(__dirname,'attachment'));
 
 /*//sequelize.sync() crea en inicializa la tabla de preguntas en DB
 sequelize.sync().then(function() { 		//sync() crea la tabla quiz
@@ -61,6 +63,11 @@ Quiz.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 User.hasMany(Comment, {foreignKey: "AuthorId"});
 Comment.belongsTo(User, {as: "Author", foreignKey: "AuthorId"});
 
+//Relacion 1 a 1 entre Quiz y Attachment
+Attachment.belongsTo(Quiz);
+Quiz.hasOne(Attachment);
+
 exports.Quiz = Quiz; //exportar la definición de la tabla Quiz
 exports.Comment = Comment; //exportar la definición de la tabla Comment
 exports.User = User; //exportar la definición de la tabla User
+exports.Attachment = Attachment; //exportar la definicion de la tabla Attachments

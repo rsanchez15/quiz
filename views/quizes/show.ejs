@@ -2,12 +2,22 @@
 <p>
 <form method="get" action="/quizes/<%= quiz.id %>/check">
   Pregunta: <%= quiz.question %> <p>
+
+    <% if (quiz.Attachment) { %>
+      <img src="<%= quiz.Attachment.url %>" />
+    <% } else { %> 
+      <img src="/images/question.jpg" width="50px" />
+    <% } %> 
+
   <input type="text" name="answer" value="<%= answer %>" placeholder="Responda aquí"/>
   <input type="submit" value="Comprobar"></p>
 </form>
 </p>
 
 <% if (session.user) { %>
+
+
+
 	<p> 
 		<a href="/quizes/<%= quiz.id %>/comments/new"><button>Nuevo comentario</button></a> 
 	</p>
